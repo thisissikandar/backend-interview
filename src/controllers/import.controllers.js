@@ -159,10 +159,6 @@ import Company from "../models/company.model.js";
 //   }
 // };
 
-
-
-
-
 // Helper to parse CSV or Excel file
 const parseFile = (filePath, fileType) => {
   return new Promise((resolve, reject) => {
@@ -188,11 +184,13 @@ const isValidEmail = (email) => {
   return typeof email === "string" && /^[^@]+@[^@]+\.[^@]+$/.test(email);
 };
 
-
 const getUpdateFields = (existingCompany, newCompany) => {
   const updateFields = {};
   for (const [key, value] of Object.entries(newCompany)) {
-    if (key !== "email" && (!existingCompany[key] || existingCompany[key] === "")) {
+    if (
+      key !== "email" &&
+      (!existingCompany[key] || existingCompany[key] === "")
+    ) {
       updateFields[key] = value;
     }
   }
@@ -211,7 +209,9 @@ const processImport = async (req, res) => {
 
     const fileType = req.file.mimetype.includes("csv") ? "csv" : "excel";
     if (!["csv", "excel"].includes(fileType)) {
-      return res.status(400).json({ error: "Only CSV or Excel files are supported" });
+      return res
+        .status(400)
+        .json({ error: "Only CSV or Excel files are supported" });
     }
 
     // Parse file
@@ -220,7 +220,7 @@ const processImport = async (req, res) => {
     // Validate data
     const validatedData = data.filter((row) => isValidEmail(row.email));
     if (validatedData.length === 0) {
-      return res.status(400).json({ error: "No valid data found in file" });
+      return res.status(400).json({ error: "Email not found in file" });
     }
 
     let inserted = 0;
@@ -233,7 +233,7 @@ const processImport = async (req, res) => {
       const existingCompany = await Company.findOne({ email: company.email });
 
       switch (mode) {
-        case 1: 
+        case 1:
           if (!existingCompany) {
             bulkOps.push({
               insertOne: { document: company },

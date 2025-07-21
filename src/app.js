@@ -54,11 +54,15 @@ app.use(morganMiddleware);
 // api route
 import healthcheckRouter from "./routes/healthcheck.routes.js";
 import appRoutes from "./routes/app.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import onboardingRoutes from "./routes/onboarding.routes.js";
 import { errorHandler } from "./middlewares/error.middlewares.js";
 
 // * healthcheck
 app.use("/api/v1/healthcheck", healthcheckRouter);
 
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/onboarding", onboardingRoutes);
 app.use("/api/v1", appRoutes);
 
 // common error handling middleware
