@@ -15,17 +15,18 @@ A Node.js + Express backend API for the RelooMate student housing platform. This
 ## API Endpoints
 
 ### Authentication
-- `POST /api/v1/register` - Register a new user
-- `POST /api/v1/login` - User login
+- `POST /api/v1/users/register` - Register a new user
+- `POST /api/v1/users/login` - User login
 
 ### User Management
-- `GET /api/v1/profile` - Get user profile (Protected)
+- `GET /api/v1/users/profile` - Get user profile (Protected route)
+- `GET /api/v1/users/logout` - Get user profile (Protected route)
 
 ### Onboarding
-- `GET /api/v1/onboarding` - Get onboarding steps
+- `GET /api/v1/users/onboarding` - Get onboarding steps  (Protected Route)
 
 ### Health Check
-- `GET /api/v1/health` - API health status
+- `GET /api/v1/healthcheck` - API health status
 
 ## Installation & Setup
 
