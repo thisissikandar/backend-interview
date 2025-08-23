@@ -14,9 +14,9 @@ const httpServer = createServer(app);
 app.use(
   cors({
     origin:
-      process.env.CORS_ORIGIN === "*"
+      CORS_ORIGIN === "*"
         ? "*" // This might give CORS error for some origins due to credentials set to true
-        : process.env.CORS_ORIGIN?.split(","),
+        : CORS_ORIGIN?.split(","),
     credentials: true,
   })
 );
@@ -58,6 +58,7 @@ import userRoutes from "./routes/user.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import onboardingRoutes from "./routes/onboarding.routes.js";
 import { errorHandler } from "./middlewares/error.middlewares.js";
+import { CORS_ORIGIN } from "./config/env.js";
 
 // * healthcheck
 app.use("/api/v1/healthcheck", healthcheckRouter);
@@ -67,7 +68,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/onboarding", onboardingRoutes);
 app.use("/api/v1", appRoutes);
 
-// common error handling middleware
+
 app.use(errorHandler);
 
 export { httpServer };

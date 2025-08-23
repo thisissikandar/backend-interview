@@ -4,6 +4,7 @@ config();
 
 export const {
   PORT,
+  CORS_ORIGIN,
   NODE_ENV,
   MONGODB_URI,
   REFRESH_TOCKEN_SECRET,
