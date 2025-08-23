@@ -1,15 +1,14 @@
-import dotenv from "dotenv";
+
 import { httpServer } from "./app.js";
+import { PORT } from "./config/env.js";
 import connectDB from "./db/index.js";
 import logger from "./logger/winston.logger.js";
 
-dotenv.config({
-  path: "./.env",
-});
+
 
 const startServer = () => {
-  httpServer.listen(process.env.PORT || 8080, () => {
-    logger.info("⚙️  Server is running on port: " + process.env.PORT);
+  httpServer.listen(PORT || 8080, () => {
+    logger.info("⚙️  Server is running on port: " + PORT);
   });
 };
 

@@ -7,10 +7,10 @@ import { User } from "../models/user.model.js";
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
-  
+
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
-  console.log("user", accessToken);
+    console.log("user", accessToken);
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
     return { accessToken, refreshToken };
@@ -58,24 +58,23 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, name, password } = req.body;
 
-  if (!(email || username)) {
+  if (!(email || name)) {
     throw new ApiError(400, "email or username is required");
   }
 
   const user = await User.findOne({
-    $or: [{ email }, { username }],
+    $or: [{ email }, { name }],
   });
 
   if (!user) {
     throw new ApiError(404, "User does not exist");
   }
-
+  // Compare the incoming password with hashed password
   const isPasswordValid = await user.isPasswordCorrect(password);
-
   if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid user password credentials");
+    throw new ApiError(401, "Invalid user credentials");
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
@@ -189,4 +188,10 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     );
 });
 
-export { getCurrentUser, registerUser, logOutUser, refreshAccessToken,loginUser };
+export {
+  getCurrentUser,
+  registerUser,
+  logOutUser,
+  refreshAccessToken,
+  loginUser,
+};
