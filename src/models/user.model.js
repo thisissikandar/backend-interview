@@ -7,6 +7,7 @@ import {
   REFRESH_TOCKEN_EXPIRY,
   REFRESH_TOCKEN_SECRET,
 } from "../config/env.js";
+import { AvailableUserRoles, UserRolesEnum } from "../constants.js";
 const userSchema = new Schema(
   {
     name: {
@@ -27,10 +28,19 @@ const userSchema = new Schema(
         "Please enter a valid email",
       ],
     },
+    role: {
+      type: String,
+      enum: AvailableUserRoles,
+      default: UserRolesEnum.USER,
+      required: true,
+    },
     password: {
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters long"],
+    },
+    refreshToken: {
+      type: String,
     },
   },
   {

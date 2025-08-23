@@ -3,11 +3,11 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
+import { REFRESH_TOCKEN_SECRET } from "../config/env.js";
 
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
-
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
     user.refreshToken = refreshToken;
@@ -144,7 +144,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
     const decodedToken = jwt.verify(
       incommingRefreshToken,
-      process.env.REFRESH_TOCKEN_SECRET
+      REFRESH_TOCKEN_SECRET
     );
     const user = await User.findById(decodedToken?._id);
     if (!user) {
@@ -158,6 +158,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
+      sameSite: "none",
+      path: "/",
     };
     const { accessToken, refreshToken: newRefreshToken } =
       await generateAccessAndRefereshTokens(user?._id);
