@@ -109,11 +109,11 @@ const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
   );
-
+console.log("NODE_ENV", NODE_ENV === "production");
   const options = {
     httpOnly: true,
     secure: NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: NODE_ENV === "production" ? "none" : "lax",
     path: "/",
   };
 
@@ -150,7 +150,7 @@ const logOutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: NODE_ENV === "production" ? "none" : "lax",
     path: "/",
   };
   return res
