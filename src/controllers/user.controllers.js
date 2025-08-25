@@ -6,6 +6,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 import {
   FORGOT_PASSWORD_REDIRECT_URL,
+  NODE_ENV,
   REFRESH_TOCKEN_SECRET,
 } from "../config/env.js";
 import { UserRolesEnum } from "../constants.js";
@@ -111,7 +112,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: NODE_ENV === "production",
     sameSite: "none",
     path: "/",
   };
@@ -148,7 +149,7 @@ const logOutUser = asyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: NODE_ENV === "production",
     sameSite: "none",
     path: "/",
   };
