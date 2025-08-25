@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import {
@@ -7,7 +8,11 @@ import {
   REFRESH_TOCKEN_EXPIRY,
   REFRESH_TOCKEN_SECRET,
 } from "../config/env.js";
-import { AvailableUserRoles, UserRolesEnum } from "../constants.js";
+import {
+  AvailableUserRoles,
+  USER_TEMPORARY_TOKEN_EXPIRY,
+  UserRolesEnum,
+} from "../constants.js";
 const userSchema = new Schema(
   {
     name: {
@@ -41,6 +46,22 @@ const userSchema = new Schema(
     },
     refreshToken: {
       type: String,
+    },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    forgotPasswordToken: {
+      type: String,
+    },
+    forgotPasswordExpiry: {
+      type: Date,
+    },
+    emailVerificationToken: {
+      type: String,
+    },
+    emailVerificationExpiry: {
+      type: Date,
     },
   },
   {
@@ -85,5 +106,22 @@ userSchema.methods.generateRefreshToken = function () {
     }
   );
 };
+/**
+ * @description Method responsible for generating tokens for email verification, password reset etc.
+ */
+userSchema.methods.generateTemporaryToken = function () {
+  // This token should be client facing
+  // for example: for email verification unHashedToken should go into the user's mail
+  const unHashedToken = crypto.randomBytes(20).toString("hex");
 
+  // This should stay in the DB to compare at the time of verification
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(unHashedToken)
+    .digest("hex");
+  // This is the expiry time for the token (20 minutes)
+  const tokenExpiry = Date.now() + USER_TEMPORARY_TOKEN_EXPIRY;
+
+  return { unHashedToken, hashedToken, tokenExpiry };
+};
 export const User = mongoose.model("User", userSchema);
