@@ -118,8 +118,6 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: NODE_ENV === "production",
     sameSite: NODE_ENV === "production" ? "none" : "lax",
-    path: "/",
-    domain: "backend-interview-i07d.onrender.com"
   };
 
   return res
@@ -156,8 +154,6 @@ const logOutUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: NODE_ENV === "production",
     sameSite: NODE_ENV === "production" ? "none" : "lax",
-    path: "/",
-    domain: "backend-interview-i07d.onrender.com"
   };
   return res
     .status(200)
@@ -193,7 +189,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      path: "/",
     };
     const { accessToken, refreshToken: newRefreshToken } =
       await generateAccessAndRefereshTokens(user?._id);
