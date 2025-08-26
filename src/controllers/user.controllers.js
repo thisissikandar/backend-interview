@@ -119,7 +119,6 @@ const loginUser = asyncHandler(async (req, res) => {
     secure: NODE_ENV === "production",
     sameSite: "none",
     path: "/",
-    domain: "backend-interview-i07d.onrender.com",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   };
 
@@ -158,7 +157,6 @@ const logOutUser = asyncHandler(async (req, res) => {
     secure: NODE_ENV === "production",
     sameSite: "none",
     path: "/",
-    domain: "backend-interview-i07d.onrender.com",
   };
   return res
     .status(200)
