@@ -156,7 +156,7 @@ const logOutUser = asyncHandler(async (req, res) => {
     secure: NODE_ENV === "production",
     sameSite: NODE_ENV === "production" ? "none" : "lax",
     path: "/",
-    domain: ".onrender.com"
+    domain: "backend-interview-i07d.onrender.com"
   };
   return res
     .status(200)
