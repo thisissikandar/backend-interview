@@ -10,7 +10,11 @@ import {
   REFRESH_TOCKEN_SECRET,
 } from "../config/env.js";
 import { UserRolesEnum } from "../constants.js";
-import { emailVerificationMailgenContent, forgotPasswordMailgenContent, sendEmail } from "../utils/mail.js";
+import {
+  emailVerificationMailgenContent,
+  forgotPasswordMailgenContent,
+  sendEmail,
+} from "../utils/mail.js";
 
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
@@ -109,13 +113,14 @@ const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
   );
-console.log("NODE_ENV", NODE_ENV === "production");
+  console.log("NODE_ENV", NODE_ENV === "production");
   const options = {
     httpOnly: true,
     secure: NODE_ENV === "production",
-    sameSite: NODE_ENV === "production" ? "none" : "lax",
+    sameSite: "none",
     path: "/",
     domain: "backend-interview-i07d.onrender.com",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   };
 
   return res
@@ -151,7 +156,7 @@ const logOutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: NODE_ENV === "production",
-    sameSite: NODE_ENV === "production" ? "none" : "lax",
+    sameSite: "none",
     path: "/",
     domain: "backend-interview-i07d.onrender.com",
   };
@@ -343,5 +348,5 @@ export {
   loginUser,
   verifyEmail,
   forgotPasswordRequest,
-  resetForgottenPassword
+  resetForgottenPassword,
 };
