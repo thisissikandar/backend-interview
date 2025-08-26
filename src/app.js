@@ -10,7 +10,12 @@ import { ApiError } from "./utils/ApiError.js";
 const app = express();
 
 const httpServer = createServer(app);
-
+console.log(
+  "cors details",
+  CORS_ORIGIN === "*"
+    ? "*" // This might give CORS error for some origins due to credentials set to true
+    : CORS_ORIGIN?.split(",")
+);
 app.use(
   cors({
     origin:
@@ -67,7 +72,6 @@ app.use("/api/v1/dashboard", dashboardRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/onboarding", onboardingRoutes);
 app.use("/api/v1", appRoutes);
-
 
 app.use(errorHandler);
 

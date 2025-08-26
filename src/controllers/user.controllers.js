@@ -117,9 +117,8 @@ const loginUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: NODE_ENV === "production" ? "none" : "lax",
     path: "/",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
   };
 
   return res
@@ -155,7 +154,7 @@ const logOutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: NODE_ENV === "production" ? "none" : "lax",
     path: "/",
   };
   return res
