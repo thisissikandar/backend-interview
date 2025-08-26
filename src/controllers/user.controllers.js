@@ -118,7 +118,6 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: NODE_ENV === "production",
     sameSite: NODE_ENV === "production" ? "none" : "lax",
-    domain: NODE_ENV === "production" ? ".onrender.com" : undefined,
   };
 
   return res
@@ -155,8 +154,6 @@ const logOutUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: NODE_ENV === "production",
     sameSite: NODE_ENV === "production" ? "none" : "lax",
-    domain: NODE_ENV === "production" ? ".onrender.com" : undefined,
-
   };
   return res
     .status(200)
