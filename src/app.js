@@ -25,20 +25,24 @@ console.log(
 //     credentials: true,
 //   })
 // );
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://exel-csv-parser-frontend.vercel.app"
-];
+
+const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || [];
+
+app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, origin);
+      // Allow requests with no origin (like mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        return callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
   })
+);
 app.use(requestIp.mw());
 
 // Rate limiter to avoid misuse of the service and avoid cost spikes
