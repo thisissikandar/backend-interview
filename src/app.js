@@ -16,16 +16,29 @@ console.log(
     ? "*" // This might give CORS error for some origins due to credentials set to true
     : CORS_ORIGIN?.split(",")
 );
-app.use(
+// app.use(
+//   cors({
+//     origin:
+//       CORS_ORIGIN === "*"
+//         ? "*" // This might give CORS error for some origins due to credentials set to true
+//         : CORS_ORIGIN?.split(","),
+//     credentials: true,
+//   })
+// );
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://exel-csv-parser-frontend.vercel.app"
+];
   cors({
-    origin:
-      CORS_ORIGIN === "*"
-        ? "*" // This might give CORS error for some origins due to credentials set to true
-        : CORS_ORIGIN?.split(","),
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
-);
-
 app.use(requestIp.mw());
 
 // Rate limiter to avoid misuse of the service and avoid cost spikes
